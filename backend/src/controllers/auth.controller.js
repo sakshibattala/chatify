@@ -1,6 +1,10 @@
+import { sendWelcomeEmail } from "../emails/emailHandlers.js";
+import { ENV } from "../lib/env.js";
 import { generateToken } from "../lib/utils.js";
 import User from "../models/user.model.js";
 import bcrypt from "bcryptjs";
+import dotenv from "dotenv";
+dotenv.config();
 
 export const signup = async (req, res) => {
   try {
@@ -44,6 +48,13 @@ export const signup = async (req, res) => {
     const savedUser = await newUser.save();
     //generate token
     generateToken(savedUser._id, res);
+
+    //send welcome email
+    await sendWelcomeEmail(
+      savedUser.fullName,
+      savedUser.email,
+      ENV.CLIENT_URL,
+    );
 
     return res.status(201).json({
       _id: savedUser._id,
