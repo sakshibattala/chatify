@@ -5,6 +5,7 @@ import messageRoutes from "./routes/message.routes.js";
 import { connectDB } from "./lib/db.js";
 import { ENV } from "./lib/env.js";
 import cookieParser from "cookie-parser";
+import cors from "cors";
 
 const app = express();
 
@@ -12,6 +13,19 @@ const __dirname = path.resolve();
 
 //middlewares
 app.use(express.json());
+
+app.use(
+  cors({
+    origin: ENV.CLIENT_URL, // "http://localhost:5173"
+    credentials: true,
+  }),
+);
+
+//  This line FIXES your error
+app.use((req, res, next) => {
+  res.header("Access-Control-Allow-Credentials", "true");
+  next();
+});
 app.use(cookieParser());
 
 app.use("/api/auth", authRoutes);
