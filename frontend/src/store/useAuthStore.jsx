@@ -25,11 +25,38 @@ export const useAuthStore = create((set) => ({
       const res = await axiosInstance.post("/auth/signup", data);
       set({ authUser: res.data });
 
-      toast.success("You're in! Welcome.");
+      toast.success(`"You're in! Welcome."`);
     } catch (error) {
       toast.error(error.response.data.message);
     } finally {
       set({ isSigningUp: false });
+    }
+  },
+
+  isLoggingIn: false,
+  login: async (data) => {
+    set({ isLoggingIn: true });
+    try {
+      const res = await axiosInstance.post("/auth/login", data);
+      set({ authUser: res.data });
+
+      toast.success(`Welcome back ${res.data.fullName}!`);
+    } catch (error) {
+      toast.error(error.response.data.message);
+    } finally {
+      set({ isLoggingIn: false });
+    }
+  },
+
+  logout: async () => {
+    try {
+      const res = await axiosInstance.post("/auth/logout");
+      set({ authUser: null });
+
+      toast.success("Catch You Later");
+    } catch (error) {
+      toast.error("Error logging out");
+      console.log("Logout error:", error);
     }
   },
 }));
