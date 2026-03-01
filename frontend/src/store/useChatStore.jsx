@@ -1,5 +1,6 @@
 import { create } from "zustand";
 import { axiosInstance } from "../lib/axios";
+import toast from "react-hot-toast";
 
 export const useChatStore = create((set, get) => ({
   contacts: [],
@@ -13,7 +14,9 @@ export const useChatStore = create((set, get) => ({
 
   setActiveTab: (tab) => set({ activeTab: tab }),
 
-  setSelectedUser: (selectedUser) => set({ selectedUser }),
+  setSelectedUser: (selectedUser) => {
+    set({ selectedUser });
+  },
 
   toggleSound: () => {
     localStorage.setItem("isSoundEnabled", !get().isSoundEnabled);
@@ -43,6 +46,18 @@ export const useChatStore = create((set, get) => ({
       console.log("Error in getChatPartners:", error);
     } finally {
       set({ isUsersLoading: false });
+    }
+  },
+
+  getMessagesByUserId: async (user) => {
+    set({ isMessagesLoading: true });
+    try {
+      const res = await axiosInstance.get(`/messages/${user._id}`);
+      set({ messages: res.data });
+    } catch (error) {
+      toast.error(error.response.data.message || "Something went wrong");
+    } finally {
+      set({ isMessagesLoading: false });
     }
   },
 }));
