@@ -31,9 +31,9 @@ app.use(cookieParser());
 app.use("/api/auth", authRoutes);
 app.use("/api/messages", messageRoutes);
 
-app.get("/", (req, res) => {
-  res.json({ message: "app is up and running" });
-});
+// app.get("/", (req, res) => {
+//   res.json({ message: "app is up and running" });
+// });
 
 // Production mode: serve React
 if (ENV.NODE_ENV === "production") {
