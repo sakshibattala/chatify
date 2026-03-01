@@ -13,12 +13,12 @@ const ChatsList = () => {
     setSelectedUser,
   } = useChatStore();
 
-  if (isUsersLoading) return <UsersLoadingSkeleton />;
-  if (chats.length === 0) return <NoChatsFound />;
-
   useEffect(() => {
     getChatPartners();
-  }, [getChatPartners]);
+  }, []);
+
+  if (isUsersLoading) return <UsersLoadingSkeleton />;
+  if (chats.length === 0) return <NoChatsFound />;
 
   return (
     <>
