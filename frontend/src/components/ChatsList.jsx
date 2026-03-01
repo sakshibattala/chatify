@@ -1,9 +1,51 @@
-import React from 'react'
+import React from "react";
+import { useChatStore } from "../store/useChatStore";
+import UsersLoadingSkeleton from "../components/UsersLoadingSkeleton";
+import NoChatsFound from "../components/NoChatsFound";
+import { useEffect } from "react";
 
 const ChatsList = () => {
-  return (
-    <div>ChatsList</div>
-  )
-}
+  const {
+    getChatPartners,
+    chats,
+    isUsersLoading,
+    selectedUser,
+    setSelectedUser,
+  } = useChatStore();
 
-export default ChatsList
+  if (isUsersLoading) return <UsersLoadingSkeleton />;
+  if (chats.length === 0) return <NoChatsFound />;
+
+  useEffect(() => {
+    getChatPartners();
+  }, [getChatPartners]);
+
+  return (
+    <>
+      {chats.map((chat) => (
+        <div
+          key={chat._id}
+          className="bg-cyan-500/10 p-4 rounded-lg cursor-pointer hover:bg-cyan-500/20 transition-colors"
+          onClick={() => setSelectedUser(chat)}
+        >
+          <div className="flex items-center gap-3">
+            {/* TODO: FIX THIS ONLINE STATUS AND MAKE IT WORK WITH SOCKET */}
+            <div className={`avatar online`}>
+              <div className="size-12 rounded-full">
+                <img
+                  src={chat.profilePic || "/avatar.png"}
+                  alt={chat.fullName}
+                />
+              </div>
+            </div>
+            <h4 className="text-slate-200 font-medium truncate">
+              {chat.fullName}
+            </h4>
+          </div>
+        </div>
+      ))}
+    </>
+  );
+};
+
+export default ChatsList;
