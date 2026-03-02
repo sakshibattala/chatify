@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import { useChatStore } from "../store/useChatStore";
 import { useAuthStore } from "../store/useAuthStore";
 import MessagesLoadingSkeleton from "./MessagesLoadingSkeleton";
@@ -9,9 +9,17 @@ const ChatBody = () => {
     useChatStore();
   const { authUser } = useAuthStore();
 
+  const messageEndRef = useRef();
+
   useEffect(() => {
     getMessagesByUserId(selectedUser);
   }, [selectedUser]);
+
+  useEffect(() => {
+    if (messageEndRef.current) {
+      messageEndRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+  }, [messages]);
 
   return (
     <div className="flex-1 px-6 overflow-y-auto py-8">
@@ -42,8 +50,14 @@ const ChatBody = () => {
                 {msg.text && <p className="mt-2">{msg.text}</p>}
                 {/* timestamps  */}
                 <p className="text-xs mt-1 opacity-75 flex items-center gap-1">
-                  {new Date(msg.createdAt).toISOString().slice(11, 16)}
+                  {new Date(msg.createdAt).toLocaleTimeString(undefined, {
+                    hour: "2-digit",
+                    minute: "2-digit",
+                  })}
                 </p>
+
+                {/* scroll target  */}
+                <div ref={messageEndRef}></div>
               </div>
             </div>
           ))}
