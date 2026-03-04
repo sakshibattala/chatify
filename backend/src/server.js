@@ -6,13 +6,12 @@ import { connectDB } from "./lib/db.js";
 import { ENV } from "./lib/env.js";
 import cookieParser from "cookie-parser";
 import cors from "cors";
-
-const app = express();
+import { app, server } from "./lib/socket.js";
 
 const __dirname = path.resolve();
 
 //middlewares
-app.use(express.json());
+app.use(express.json({ limit: "15mb" }));
 
 app.use(
   cors({
@@ -47,7 +46,7 @@ if (ENV.NODE_ENV === "production") {
 }
 
 const PORT = ENV.PORT || 5000;
-app.listen(PORT, () => {
+server.listen(PORT, () => {
   console.log("app is listening on port:", PORT);
   connectDB();
 });

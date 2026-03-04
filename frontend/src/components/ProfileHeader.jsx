@@ -7,7 +7,8 @@ import { LoaderIcon } from "react-hot-toast";
 const mouseClickSound = new Audio("/sounds/mouse-click.mp3");
 
 const ProfileHeader = () => {
-  const { isProfileUpdating, updateProfile, logout, authUser } = useAuthStore();
+  const { isProfileUpdating, updateProfile, logout, authUser, onlineUsers } =
+    useAuthStore();
   const { isSoundEnabled, toggleSound } = useChatStore();
   const [selectedImage, setSelectedImage] = useState(null);
 
