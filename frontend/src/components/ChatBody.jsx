@@ -5,14 +5,23 @@ import MessagesLoadingSkeleton from "./MessagesLoadingSkeleton";
 import NoChatHistoryPlaceholder from "./NoChatHistoryPlaceholder";
 
 const ChatBody = () => {
-  const { messages, getMessagesByUserId, selectedUser, isMessagesLoading } =
-    useChatStore();
+  const {
+    messages,
+    getMessagesByUserId,
+    selectedUser,
+    isMessagesLoading,
+    subscribeToMessages,
+    unsubscribeFromMessages,
+  } = useChatStore();
   const { authUser } = useAuthStore();
 
   const messageEndRef = useRef();
 
   useEffect(() => {
     getMessagesByUserId(selectedUser);
+    subscribeToMessages();
+
+    return () => unsubscribeFromMessages();
   }, [selectedUser]);
 
   useEffect(() => {

@@ -18,6 +18,12 @@ const io = new Server(server, {
 //apply authentication middleware to all socket connections
 io.use(socketAuthMiddleware);
 
+
+//to get socket id of receiver so that we can emit msg to that receiver
+export const getReceiverSocketId = (userId) => {
+  return onlineUsers[userId];
+};
+
 //object for storing online users
 const onlineUsers = {}; //{userId: socketId}
 

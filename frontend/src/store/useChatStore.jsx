@@ -93,4 +93,36 @@ export const useChatStore = create((set, get) => ({
       console.log("Error in sendMessage:", error);
     }
   },
+
+  subscribeToMessages: async () => {
+    const { selectedUser, isSoundEnabled } = get();
+    if (!selectedUser) return;
+
+    const socket = useAuthStore.getState().socket;
+
+    socket.on("new-message", (newMessage) => {
+      const isMessageSentFromSelectedUser =
+        newMessage.senderId === selectedUser._id;
+      if (!isMessageSentFromSelectedUser) return;
+
+      const currentMessages = get().messages;
+      set({ messages: [...currentMessages, newMessage] });
+    });
+
+    // if (isSoundEnabled) {
+    //   const notificationSound = new Audio("/sounds/notification.mp3");
+
+    //   notificationSound.currentTime = 0;
+    //   notificationSound
+    //     .play()
+    //     .catch((error) =>
+    //       console.log("failed to play notification sound", error),
+    //     );
+    // }
+  },
+
+  unsubscribeFromMessages: () => {
+    const socket = useAuthStore.getState().socket;
+    socket.off("new-message");
+  },
 }));

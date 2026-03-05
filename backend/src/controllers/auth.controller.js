@@ -49,7 +49,7 @@ export const signup = async (req, res) => {
     generateToken(savedUser._id, res);
 
     //send welcome email
-    await sendWelcomeEmail(savedUser.fullName, savedUser.email, ENV.CLIENT_URL);
+    // await sendWelcomeEmail(savedUser.fullName, savedUser.email, ENV.CLIENT_URL);
 
     return res.status(201).json({
       _id: savedUser._id,

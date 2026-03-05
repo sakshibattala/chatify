@@ -1,3 +1,7 @@
+//We use socket authentication middleware to verify the user's 
+// JWT during the socket handshake and attach the authenticated user to the 
+// socket object so that all real-time events can securely identify the user.
+
 import jwt from "jsonwebtoken";
 import { ENV } from "../lib/env.js";
 import User from "../models/user.model.js";
