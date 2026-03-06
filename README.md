@@ -2,6 +2,8 @@
 
 Chatify is a real-time chat application that allows users to communicate seamlessly. It features a modern frontend built with React and Tailwind CSS, and a robust backend powered by Node.js and Express.js. The application also integrates with various third-party services for enhanced functionality.
 
+## Live Link: https://chatify-xnxs.onrender.com/
+
 ## Table of Contents
 
 - [Features](#features)
