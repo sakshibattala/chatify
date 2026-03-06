@@ -47,7 +47,7 @@ const MessageInput = () => {
   };
 
   return (
-    <div className="p-4 border-t border-slate-700/50">
+    <div className="sticky bottom-0 bg-slate-900 p-4 border-t border-slate-700/50">
       {imagePreview && (
         <div className="max-w-3xl mx-auto mb-3 flex items-center">
           <div className="relative">
@@ -93,18 +93,18 @@ const MessageInput = () => {
         <button
           type="button"
           onClick={() => fileInputRef.current?.click()}
-          className={`bg-slate-800/50 text-slate-400 hover:text-slate-200 rounded-lg px-4 transition-colors ${
+          className={`bg-slate-800/50 text-slate-400 hover:text-slate-200 rounded-lg px-3 transition-colors ${
             imagePreview ? "text-cyan-500" : ""
           }`}
         >
-          <ImageIcon className="w-5 h-5" />
+          <ImageIcon className="w-3 h-3 md:w-5 md:h-5" />
         </button>
         <button
           type="submit"
           disabled={!text.trim() && !imagePreview}
-          className="bg-gradient-to-r from-cyan-500 to-cyan-600 text-white rounded-lg px-4 py-2 font-medium hover:from-cyan-600 hover:to-cyan-700 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+          className="bg-gradient-to-r from-cyan-500 to-cyan-600 text-white rounded-lg px-3 font-medium hover:from-cyan-600 hover:to-cyan-700 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
         >
-          <SendIcon className="w-5 h-5" />
+          <SendIcon className="w-3 h-3 md:w-5 md:h-5" />
         </button>
       </form>
     </div>

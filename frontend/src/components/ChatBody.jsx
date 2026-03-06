@@ -13,9 +13,10 @@ const ChatBody = () => {
     subscribeToMessages,
     unsubscribeFromMessages,
   } = useChatStore();
+
   const { authUser } = useAuthStore();
 
-  const messageEndRef = useRef();
+  const messageEndRef = useRef(null);
 
   useEffect(() => {
     getMessagesByUserId(selectedUser);
@@ -25,57 +26,63 @@ const ChatBody = () => {
   }, [selectedUser]);
 
   useEffect(() => {
-    if (messageEndRef.current) {
-      messageEndRef.current.scrollIntoView({ behavior: "smooth" });
-    }
+    messageEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
   return (
-    <div className="flex-1 px-6 overflow-y-auto py-8">
+    <div className="flex-1 overflow-y-auto px-4 md:px-6 py-6">
+      
       {messages.length > 0 && !isMessagesLoading ? (
-        <div className="max-w-3xl mx-auto space-y-6">
+        <div className="max-w-3xl mx-auto flex flex-col gap-4">
+
           {messages.map((msg) => (
             <div
               key={msg._id}
-              className={`chat ${msg.senderId === authUser._id ? "chat-end" : "chat-start"}`}
+              className={`flex ${
+                msg.senderId === authUser._id
+                  ? "justify-end"
+                  : "justify-start"
+              }`}
             >
               <div
-                className={`chat-bubble relative ${
+                className={`max-w-[75%] rounded-xl px-4 py-2 break-words shadow-sm ${
                   msg.senderId === authUser._id
                     ? "bg-cyan-600 text-white"
                     : "bg-slate-800 text-slate-200"
                 }`}
               >
-                {/* if msg is image  */}
+                {/* Image message */}
                 {msg.image && (
                   <img
                     src={msg.image}
                     alt="shared"
-                    className="rounded-lg h-48 object-cover"
+                    className="rounded-lg mb-2 max-h-60 object-cover"
                   />
                 )}
 
-                {/* if msg is chat */}
-                {msg.text && <p className="mt-2">{msg.text}</p>}
-                {/* timestamps  */}
-                <p className="text-xs mt-1 opacity-75 flex items-center gap-1">
-                  {new Date(msg.createdAt).toLocaleTimeString(undefined, {
+                {/* Text message */}
+                {msg.text && <p>{msg.text}</p>}
+
+                {/* Timestamp */}
+                <p className="text-[11px] mt-1 opacity-70">
+                  {new Date(msg.createdAt).toLocaleTimeString([], {
                     hour: "2-digit",
                     minute: "2-digit",
                   })}
                 </p>
-
-                {/* scroll target  */}
-                <div ref={messageEndRef}></div>
               </div>
             </div>
           ))}
+
+          {/* Scroll anchor */}
+          <div ref={messageEndRef}></div>
         </div>
       ) : isMessagesLoading ? (
         <MessagesLoadingSkeleton />
       ) : (
         <NoChatHistoryPlaceholder />
       )}
+
     </div>
   );
 };
